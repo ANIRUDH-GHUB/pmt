@@ -10,17 +10,6 @@ import { SidenavItemComponent } from '../sidenav-item/sidenav-item.component';
 
 @Component({
   selector: 'app-shell',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    SidenavItemComponent
-  ],
   templateUrl: './shell.component.html',
   styleUrls: ['./shell.component.scss']
 })

@@ -5,12 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-outline-btn',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule
-  ],
   templateUrl: './outline-btn.component.html',
   styleUrls: ['./outline-btn.component.scss']
 })

@@ -9,8 +9,6 @@ import * as UIActions from './store/ui/ui.actions';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, CommonModule],
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {

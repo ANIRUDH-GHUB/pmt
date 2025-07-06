@@ -5,11 +5,6 @@ import { ApexAxisChartSeries } from 'ng-apexcharts';
 
 @Component({
   selector: 'app-metrics-card',
-  standalone: true,
-  imports: [
-    CommonModule,
-    NgApexchartsModule
-  ],
   templateUrl: './metrics-card.component.html',
   styleUrls: ['./metrics-card.component.scss']
 })

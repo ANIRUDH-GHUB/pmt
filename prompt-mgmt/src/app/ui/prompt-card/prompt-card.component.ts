@@ -13,16 +13,6 @@ import { PromptModel } from './prompt-card.model';
 
 @Component({
   selector: 'app-prompt-card',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatChipsModule,
-    MatBadgeModule,
-    MatMenuModule
-  ],
   templateUrl: './prompt-card.component.html',
   styleUrls: ['./prompt-card.component.scss']
 })

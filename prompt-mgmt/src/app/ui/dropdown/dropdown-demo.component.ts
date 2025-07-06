@@ -4,8 +4,6 @@ import { DropdownComponent, DropdownItem } from './dropdown.component';
 
 @Component({
   selector: 'app-dropdown-demo',
-  standalone: true,
-  imports: [CommonModule, DropdownComponent],
   template: `
     <div class="p-6 space-y-8">
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Dropdown Component Demo</h2>

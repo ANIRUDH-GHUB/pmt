@@ -54,9 +54,9 @@
     <div class="mb-4">
       <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Input Fields:</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-        <div *ngFor="let [key, value] of Object.entries(inputValues)" class="bg-white dark:bg-gray-800 p-2 rounded border">
-          <span class="font-medium text-gray-600 dark:text-gray-400">{{ key }}:</span>
-          <span class="ml-2 text-gray-900 dark:text-white">{{ value || '(empty)' }}</span>
+        <div *ngFor="let item of inputValues | keyvalue" class="bg-white dark:bg-gray-800 p-2 rounded border">
+          <span class="font-medium text-gray-600 dark:text-gray-400">{{ item.key }}:</span>
+          <span class="ml-2 text-gray-900 dark:text-white">{{ item.value || '(empty)' }}</span>
         </div>
       </div>
     </div>
@@ -65,9 +65,9 @@
     <div class="mb-4">
       <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Slider Values:</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
-        <div *ngFor="let [key, value] of Object.entries(sliderValues)" class="bg-white dark:bg-gray-800 p-2 rounded border">
-          <span class="font-medium text-gray-600 dark:text-gray-400">{{ key }}:</span>
-          <span class="ml-2 text-gray-900 dark:text-white">{{ value }}</span>
+        <div *ngFor="let item of sliderValues | keyvalue" class="bg-white dark:bg-gray-800 p-2 rounded border">
+          <span class="font-medium text-gray-600 dark:text-gray-400">{{ item.key }}:</span>
+          <span class="ml-2 text-gray-900 dark:text-white">{{ item.value }}</span>
         </div>
       </div>
     </div>

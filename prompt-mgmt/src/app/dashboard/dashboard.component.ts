@@ -8,14 +8,6 @@ import { ApexAxisChartSeries } from 'ng-apexcharts';
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MetricsCardComponent,
-    PrimaryBtnComponent,
-    OutlineBtnComponent,
-    VariablePanelComponent
-  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

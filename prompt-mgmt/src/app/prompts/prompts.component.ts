@@ -31,20 +31,6 @@ interface FilterState {
 
 @Component({
   selector: 'app-prompts',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatChipsModule,
-    MatBadgeModule,
-    MatProgressSpinnerModule,
-    HeaderComponent,
-    PromptGridComponent,
-    FilterBarComponent,
-    CreatePromptModalComponent
-  ],
   templateUrl: './prompts.component.html',
   styleUrls: ['./prompts.component.scss']
 })

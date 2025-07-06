@@ -11,17 +11,6 @@ import { FileExtractionService, ExtractedText, FileExtractionOptions } from '../
 
 @Component({
   selector: 'app-file-upload-demo',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatChipsModule,
-    MatExpansionModule,
-    FileUploadComponent
-  ],
   templateUrl: './file-upload-demo.component.html',
   styleUrls: ['./file-upload-demo.component.scss']
 })

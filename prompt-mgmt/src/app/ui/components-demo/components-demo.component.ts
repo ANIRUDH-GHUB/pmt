@@ -7,8 +7,6 @@ import { TabSectionComponent, TabSection, TabSectionConfig } from '../tab-sectio
 
 @Component({
   selector: 'app-components-demo',
-  standalone: true,
-  imports: [CommonModule, FormsModule, InputFieldComponent, SliderInputComponent, TabSectionComponent],
   templateUrl: './components-demo.component.html',
   styleUrls: ['./components-demo.component.scss']
 })

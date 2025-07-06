@@ -13,8 +13,6 @@ export interface ModalConfig {
 
 @Component({
   selector: 'app-modal',
-  standalone: true,
-  imports: [CommonModule, MatIconModule],
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss']
 })

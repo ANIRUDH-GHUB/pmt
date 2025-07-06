@@ -39,23 +39,6 @@ export interface TabSection {
 
 @Component({
   selector: 'app-create-prompt-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSliderModule,
-    MatChipsModule,
-    MatDividerModule,
-    InputFieldComponent,
-    SliderInputComponent,
-    TabSectionComponent,
-    DropdownComponent
-  ],
   templateUrl: './create-prompt-form.component.html',
   styleUrls: ['./create-prompt-form.component.scss']
 })

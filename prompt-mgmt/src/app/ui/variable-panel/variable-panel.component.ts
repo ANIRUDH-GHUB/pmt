@@ -16,15 +16,6 @@ export interface PromptVariable {
 
 @Component({
   selector: 'app-variable-panel',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    MatChipsModule
-  ],
   templateUrl: './variable-panel.component.html',
   styleUrls: ['./variable-panel.component.scss']
 })

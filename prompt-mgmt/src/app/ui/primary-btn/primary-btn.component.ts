@@ -5,12 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-primary-btn',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule
-  ],
   templateUrl: './primary-btn.component.html',
   styleUrls: ['./primary-btn.component.scss']
 })

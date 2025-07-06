@@ -18,8 +18,6 @@ export interface SliderInputConfig {
 
 @Component({
   selector: 'app-slider-input',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -25,8 +25,6 @@ export interface TabSectionConfig {
 
 @Component({
   selector: 'app-tab-section',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './tab-section.component.html',
   styleUrls: ['./tab-section.component.scss']
 })

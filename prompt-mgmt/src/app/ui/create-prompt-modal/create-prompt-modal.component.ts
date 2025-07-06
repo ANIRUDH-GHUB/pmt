@@ -10,15 +10,6 @@ import { PromptModel } from '../prompt-card/prompt-card.model';
 
 @Component({
   selector: 'app-create-prompt-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    CreatePromptFormComponent,
-    ModalComponent
-  ],
   templateUrl: './create-prompt-modal.component.html',
   styleUrls: ['./create-prompt-modal.component.scss']
 })

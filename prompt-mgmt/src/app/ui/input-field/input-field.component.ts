@@ -22,8 +22,6 @@ export interface InputFieldConfig {
 
 @Component({
   selector: 'app-input-field',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

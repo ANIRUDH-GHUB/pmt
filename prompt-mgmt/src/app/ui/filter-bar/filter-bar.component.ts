@@ -12,18 +12,6 @@ import { PromptModel } from '../prompt-card/prompt-card.model';
 
 @Component({
   selector: 'app-filter-bar',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSlideToggleModule,
-    DropdownComponent
-  ],
   templateUrl: './filter-bar.component.html',
   styleUrls: ['./filter-bar.component.scss']
 })

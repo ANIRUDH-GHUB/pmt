@@ -48,25 +48,6 @@ interface PlaygroundState {
 
 @Component({
   selector: 'app-playground',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressBarModule,
-    MatTooltipModule,
-    MatMenuModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSliderModule,
-    MatCardModule,
-    MatChipsModule,
-    MatDividerModule,
-    MatBadgeModule,
-    HeaderComponent
-  ],
   templateUrl: './playground.component.html',
   styleUrls: ['./playground.component.scss']
 })
