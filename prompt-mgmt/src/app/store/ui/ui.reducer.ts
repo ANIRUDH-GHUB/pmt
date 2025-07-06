@@ -10,6 +10,11 @@ export const uiReducer = createReducer(
     isDarkMode: !state.isDarkMode
   })),
   
+  on(UIActions.setDarkMode, (state, { isDarkMode }) => ({
+    ...state,
+    isDarkMode
+  })),
+  
   on(UIActions.openModal, (state, { modalType }) => ({
     ...state,
     isModalOpen: true,

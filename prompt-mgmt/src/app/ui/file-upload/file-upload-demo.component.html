@@ -1,0 +1,234 @@
+<div class="demo-container">
+  <div class="demo-header">
+    <h1>File Extraction Demo</h1>
+    <p>Upload PDF, DOC, DOCX, and TXT files to extract their text content</p>
+  </div>
+
+  <!-- Error Display -->
+  <div *ngIf="errors.length > 0" class="error-section">
+    <div class="error-header">
+      <h3>Errors ({{ errors.length }})</h3>
+      <button mat-button color="warn" (click)="clearErrors()">
+        <mat-icon>clear</mat-icon>
+        Clear Errors
+      </button>
+    </div>
+    <div class="error-list">
+      <div *ngFor="let error of errors" class="error-item">
+        <mat-icon>error</mat-icon>
+        <span>{{ error }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Upload Tabs -->
+  <mat-tab-group [(selectedIndex)]="currentTab" class="upload-tabs">
+    <!-- Basic Upload -->
+    <mat-tab label="Basic Upload">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Basic Text Extraction</mat-card-title>
+            <mat-card-subtitle>
+              Simple text extraction with metadata
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <app-file-upload
+              [multiple]="true"
+              [extractionOptions]="basicOptions"
+              (filesSelected)="onFilesSelected($event)"
+              (extractionComplete)="onExtractionComplete($event)"
+              (extractionError)="onExtractionError($event)"
+            ></app-file-upload>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Advanced Upload -->
+    <mat-tab label="Advanced Upload">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Advanced Text Extraction</mat-card-title>
+            <mat-card-subtitle>
+              Full extraction with pages and language detection
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <app-file-upload
+              [multiple]="true"
+              [extractionOptions]="advancedOptions"
+              (filesSelected)="onFilesSelected($event)"
+              (extractionComplete)="onExtractionComplete($event)"
+              (extractionError)="onExtractionError($event)"
+            ></app-file-upload>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Custom Upload -->
+    <mat-tab label="Custom Upload">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Custom Configuration</mat-card-title>
+            <mat-card-subtitle>
+              Limited file size (10MB) with all features enabled
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <app-file-upload
+              [multiple]="false"
+              [maxFileSize]="10 * 1024 * 1024"
+              [extractionOptions]="customOptions"
+              (filesSelected)="onFilesSelected($event)"
+              (extractionComplete)="onExtractionComplete($event)"
+              (extractionError)="onExtractionError($event)"
+            ></app-file-upload>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <!-- Results Section -->
+  <div *ngIf="extractedTexts.length > 0" class="results-section">
+    <div class="results-header">
+      <h2>Extraction Results ({{ extractedTexts.length }})</h2>
+      <button mat-raised-button color="primary" (click)="clearResults()">
+        <mat-icon>clear_all</mat-icon>
+        Clear Results
+      </button>
+    </div>
+
+    <div class="results-list">
+      <mat-expansion-panel *ngFor="let extractedText of extractedTexts; let i = index">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>{{ getFileIcon(extractedText.metadata.fileType) }}</mat-icon>
+            {{ extractedText.metadata.fileName }}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ extractedText.metadata.fileType }} • 
+            {{ formatFileSize(extractedText.metadata.fileSize) }}
+            <span *ngIf="extractedText.metadata.pageCount">
+              • {{ extractedText.metadata.pageCount }} pages
+            </span>
+            <span *ngIf="extractedText.metadata.language">
+              • {{ extractedText.metadata.language.toUpperCase() }}
+            </span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="extraction-details">
+          <!-- Metadata -->
+          <div class="metadata-section">
+            <h4>Metadata</h4>
+            <div class="metadata-grid">
+              <div class="metadata-item">
+                <strong>File Name:</strong> {{ extractedText.metadata.fileName }}
+              </div>
+              <div class="metadata-item">
+                <strong>File Type:</strong> {{ extractedText.metadata.fileType }}
+              </div>
+              <div class="metadata-item">
+                <strong>File Size:</strong> {{ formatFileSize(extractedText.metadata.fileSize) }}
+              </div>
+              <div class="metadata-item">
+                <strong>Extracted At:</strong> {{ extractedText.metadata.extractedAt | date:'medium' }}
+              </div>
+              <div *ngIf="extractedText.metadata.pageCount" class="metadata-item">
+                <strong>Page Count:</strong> {{ extractedText.metadata.pageCount }}
+              </div>
+              <div *ngIf="extractedText.metadata.language" class="metadata-item">
+                <strong>Language:</strong> {{ extractedText.metadata.language.toUpperCase() }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="actions-section">
+            <button mat-button color="primary" (click)="copyToClipboard(extractedText.content)">
+              <mat-icon>content_copy</mat-icon>
+              Copy Text
+            </button>
+            <button mat-button color="accent" (click)="downloadExtractedText(extractedText)">
+              <mat-icon>download</mat-icon>
+              Download
+            </button>
+          </div>
+
+          <!-- Content Preview -->
+          <div class="content-section">
+            <h4>Extracted Content</h4>
+            <div class="content-preview">
+              <pre>{{ extractedText.content }}</pre>
+            </div>
+          </div>
+
+          <!-- Pages (if available) -->
+          <div *ngIf="extractedText.pages && extractedText.pages.length > 0" class="pages-section">
+            <h4>Pages ({{ extractedText.pages.length }})</h4>
+            <div class="pages-list">
+              <mat-expansion-panel *ngFor="let page of extractedText.pages; let pageIndex = index">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>Page {{ pageIndex + 1 }}</mat-panel-title>
+                  <mat-panel-description>
+                    {{ page.length }} characters
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="page-content">
+                  <pre>{{ page }}</pre>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </div>
+
+  <!-- Supported Formats -->
+  <div class="formats-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Supported File Formats</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="formats-grid">
+          <div class="format-item">
+            <mat-icon>picture_as_pdf</mat-icon>
+            <div class="format-details">
+              <strong>PDF</strong>
+              <span>Portable Document Format</span>
+            </div>
+          </div>
+          <div class="format-item">
+            <mat-icon>description</mat-icon>
+            <div class="format-details">
+              <strong>DOC</strong>
+              <span>Microsoft Word Document</span>
+            </div>
+          </div>
+          <div class="format-item">
+            <mat-icon>description</mat-icon>
+            <div class="format-details">
+              <strong>DOCX</strong>
+              <span>Microsoft Word Document (XML)</span>
+            </div>
+          </div>
+          <div class="format-item">
+            <mat-icon>article</mat-icon>
+            <div class="format-details">
+              <strong>TXT</strong>
+              <span>Plain Text File</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> 

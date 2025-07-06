@@ -21,6 +21,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { PromptModel } from '../ui/prompt-card/prompt-card.model';
 import { selectAllPrompts } from '../store/prompt/prompt.selectors';
+import { HeaderComponent } from '../ui/header/header.component';
+import * as UISelectors from '../store/ui/ui.selectors';
+import * as UIActions from '../store/ui/ui.actions';
+import { FileExtractionService } from '../services/file-extraction.service';
 
 interface PlaygroundState {
   prompt: PromptModel | null;
@@ -60,7 +64,8 @@ interface PlaygroundState {
     MatCardModule,
     MatChipsModule,
     MatDividerModule,
-    MatBadgeModule
+    MatBadgeModule,
+    HeaderComponent
   ],
   templateUrl: './playground.component.html',
   styleUrls: ['./playground.component.scss']
@@ -70,8 +75,10 @@ export class PlaygroundComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private fileExtractionService = inject(FileExtractionService);
 
   prompts$ = this.store.select(selectAllPrompts);
+  isDarkMode$ = this.store.select(UISelectors.selectIsDarkMode);
   
   playgroundState: PlaygroundState = {
     prompt: null,
@@ -94,6 +101,11 @@ export class PlaygroundComponent implements OnInit {
   };
 
   ngOnInit() {
+    // Test FileExtractionService
+    console.log('FileExtractionService available:', !!this.fileExtractionService);
+    console.log('Supported file types:', this.fileExtractionService.getSupportedFileTypes());
+    console.log('Supported extensions:', this.fileExtractionService.getSupportedExtensions());
+    
     this.route.params.pipe(
       map(params => params['promptId']),
       switchMap(promptId => 
@@ -152,12 +164,14 @@ export class PlaygroundComponent implements OnInit {
   }
 
   onModelSettingsChange() {
-    this.playgroundState.showModelSettings = false;
+    // Don't close the model settings popover when options change
+    // this.playgroundState.showModelSettings = false;
   }
 
   onFileUpload(event: any) {
     const file = event.target.files[0];
     if (file) {
+      console.log('File uploaded:', file.name, file.type, file.size);
       this.playgroundState.uploadedFileName = file.name;
       this.extractTextFromFile(file);
     }
@@ -186,38 +200,51 @@ export class PlaygroundComponent implements OnInit {
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
       const file = files[0];
+      console.log('File dropped:', file.name, file.type, file.size);
       this.playgroundState.uploadedFileName = file.name;
       this.extractTextFromFile(file);
     }
   }
 
   private extractTextFromFile(file: File) {
+    // Show loading state
+    this.playgroundState.inputText = `[Processing: ${file.name}]\n\nExtracting text content...`;
+    
+    // For text files, try simple extraction first as fallback
     if (file.type === 'text/plain') {
       const reader = new FileReader();
       reader.onload = (e) => {
         const text = e.target?.result as string;
         this.playgroundState.inputText = text;
-      };
-      reader.readAsText(file, 'UTF-8');
-    } else if (file.type === 'application/pdf') {
-      this.playgroundState.inputText = `[PDF File: ${file.name}]\n\nPDF text extraction is not implemented in this demo. Please copy and paste the text content manually, or upload a text file instead.\n\nFile size: ${(file.size / 1024).toFixed(1)} KB`;
-    } else if (file.type === 'application/msword' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-      this.playgroundState.inputText = `[Word Document: ${file.name}]\n\nWord document text extraction is not implemented in this demo. Please copy and paste the text content manually, or upload a text file instead.\n\nFile size: ${(file.size / 1024).toFixed(1)} KB`;
-    } else {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        if (result && result.length > 0 && !/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/.test(result)) {
-          this.playgroundState.inputText = result;
-        } else {
-          this.playgroundState.inputText = `[Binary File: ${file.name}]\n\nThis file appears to be binary and cannot be read as text. Please upload a text file (.txt) or copy and paste the content manually.\n\nFile size: ${(file.size / 1024).toFixed(1)} KB`;
-        }
+        console.log('Simple text file extraction successful');
       };
       reader.onerror = () => {
-        this.playgroundState.inputText = `[Error Reading File: ${file.name}]\n\nUnable to read this file. Please upload a text file (.txt) or copy and paste the content manually.\n\nFile size: ${(file.size / 1024).toFixed(1)} KB`;
+        this.fallbackToService(file);
       };
       reader.readAsText(file, 'UTF-8');
+      return;
     }
+    
+    // Use the FileExtractionService for other file types
+    this.fallbackToService(file);
+  }
+
+  private fallbackToService(file: File) {
+    this.fileExtractionService.extractTextFromFile(file, {
+      includeMetadata: true,
+      includePages: false,
+      languageDetection: false
+    }).subscribe({
+      next: (result) => {
+        this.playgroundState.inputText = result.content;
+        console.log('File extraction successful:', result.metadata);
+      },
+      error: (error) => {
+        console.error('File extraction failed:', error);
+        this.playgroundState.inputText = `[Error: ${file.name}]\n\nFailed to extract text from this file: ${error.message}\n\nPlease try uploading a different file or copy and paste the content manually.\n\nFile size: ${(file.size / 1024).toFixed(1)} KB`;
+        this.snackBar.open(`Failed to extract text from ${file.name}`, 'Close', { duration: 5000 });
+      }
+    });
   }
 
   onClearInput() {
@@ -290,6 +317,10 @@ Generated at: ${new Date().toLocaleString()}`;
 
   toggleModelSettings() {
     this.playgroundState.showModelSettings = !this.playgroundState.showModelSettings;
+  }
+
+  toggleDarkMode() {
+    this.store.dispatch(UIActions.toggleDarkMode());
   }
 
   public goBackToPrompts() {

@@ -1,0 +1,12 @@
+This is a test file for the prompt management system.
+
+It contains multiple lines of text to test the file extraction functionality.
+
+The file should be processed by the FileExtractionService and the content should appear in the playground input area.
+
+This tests:
+- Text file upload
+- File content extraction
+- Input area population
+
+End of test file. 

@@ -1,0 +1,153 @@
+<div class="file-upload-container">
+  <!-- File Upload Area -->
+  <div 
+    class="upload-area"
+    [class.drag-over]="dragOver"
+    [class.uploading]="isUploading"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+  >
+    <div class="upload-content">
+      <span class="material-icons upload-icon">cloud_upload</span>
+      <h3 class="upload-title">Upload Files</h3>
+      <p class="upload-description">
+        Drag and drop files here or click to browse
+      </p>
+      <p class="upload-formats">
+        Supported formats: {{ getSupportedExtensions() }}
+      </p>
+      <p class="upload-size">
+        Maximum file size: {{ formatFileSize(maxFileSize) }}
+      </p>
+      
+      <input
+        type="file"
+        [accept]="accept"
+        [multiple]="multiple"
+        (change)="onFileSelected($event)"
+        class="file-input"
+        #fileInput
+      >
+      
+      <button
+        type="button"
+        class="upload-button"
+        (click)="fileInput.click()"
+        [disabled]="isUploading"
+      >
+        <span class="material-icons">folder_open</span>
+        Choose Files
+      </button>
+    </div>
+
+    <!-- Upload Progress -->
+    <div *ngIf="isUploading" class="upload-progress">
+      <mat-progress-bar
+        mode="determinate"
+        [value]="uploadProgress"
+        class="progress-bar"
+      ></mat-progress-bar>
+      <p class="progress-text">Extracting text from files...</p>
+    </div>
+  </div>
+
+  <!-- Selected Files -->
+  <div *ngIf="selectedFiles.length > 0" class="selected-files">
+    <div class="files-header">
+      <h4>Selected Files ({{ selectedFiles.length }})</h4>
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearAll()"
+        [disabled]="isUploading"
+      >
+        <span class="material-icons">clear_all</span>
+        Clear All
+      </button>
+    </div>
+
+    <div class="files-list">
+      <div 
+        *ngFor="let file of selectedFiles; trackBy: trackByFileName"
+        class="file-item"
+      >
+        <div class="file-info">
+          <span class="material-icons file-icon">
+            {{ getFileIcon(getFileType(file)) }}
+          </span>
+          <div class="file-details">
+            <span class="file-name">{{ file.name }}</span>
+            <span class="file-size">{{ formatFileSize(file.size) }}</span>
+          </div>
+        </div>
+        
+        <button
+          type="button"
+          class="remove-button"
+          (click)="removeFile(file)"
+          [disabled]="isUploading"
+        >
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extracted Text Preview -->
+  <div *ngIf="showPreview && extractedTexts.length > 0" class="extracted-text">
+    <h4>Extracted Text ({{ extractedTexts.length }})</h4>
+    
+    <div class="text-list">
+      <div 
+        *ngFor="let extractedText of extractedTexts; trackBy: trackByFileName"
+        class="text-item"
+      >
+        <div class="text-header">
+          <div class="text-info">
+            <span class="material-icons text-icon">
+              {{ getFileIcon(extractedText.metadata.fileType) }}
+            </span>
+            <div class="text-details">
+              <span class="text-name">{{ extractedText.metadata.fileName }}</span>
+              <span class="text-meta">
+                {{ extractedText.metadata.fileType }} • 
+                {{ formatFileSize(extractedText.metadata.fileSize) }}
+                <span *ngIf="extractedText.metadata.pageCount">
+                  • {{ extractedText.metadata.pageCount }} pages
+                </span>
+                <span *ngIf="extractedText.metadata.language">
+                  • {{ extractedText.metadata.language.toUpperCase() }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-content">
+          <div class="text-preview">
+            {{ extractedText.content.length > 500 
+              ? (extractedText.content | slice:0:500) + '...' 
+              : extractedText.content 
+            }}
+          </div>
+          
+          <div *ngIf="extractedText.pages && extractedText.pages.length > 0" class="text-pages">
+            <h5>Pages ({{ extractedText.pages.length }})</h5>
+            <div class="pages-list">
+              <div 
+                *ngFor="let page of extractedText.pages; let i = index"
+                class="page-item"
+              >
+                <span class="page-number">Page {{ i + 1 }}</span>
+                <div class="page-content">
+                  {{ page.length > 200 ? (page | slice:0:200) + '...' : page }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

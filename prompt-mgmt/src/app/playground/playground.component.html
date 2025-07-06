@@ -1,33 +1,20 @@
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
   <!-- Header -->
-  <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
-        <!-- Back Button -->
-        <button
-          (click)="goBackToPrompts()"
-          class="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-        >
-          <span class="material-icons text-sm">arrow_back</span>
-          <span class="text-sm font-medium">Back to Prompts</span>
-        </button>
-
-        <!-- Title -->
-        <div class="flex items-center gap-3">
-          <h1 class="text-lg font-semibold text-gray-900 dark:text-white">
-            Playground
-          </h1>
-          <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-        </div>
-
-        <!-- Right side empty for balance -->
-        <div class="w-24"></div>
-      </div>
-    </div>
-  </div>
+  <app-header></app-header>
 
   <!-- Main Content -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Back Button -->
+    <div class="mb-6">
+      <button
+        (click)="goBackToPrompts()"
+        class="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+      >
+        <span class="material-icons text-sm">arrow_back</span>
+        <span class="text-sm font-medium">Back to Prompts</span>
+      </button>
+    </div>
+    
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Left Panel - Prompt Details -->
       <div class="lg:col-span-1">
@@ -91,7 +78,6 @@
                       <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Model Type</label>
                       <select
                         [(ngModel)]="playgroundState.modelSettings.modelType"
-                        (change)="onModelSettingsChange()"
                         class="w-full text-xs bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-white"
                       >
                         <option value="OpenAI">OpenAI</option>
@@ -103,7 +89,6 @@
                       <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Model Version</label>
                       <select
                         [(ngModel)]="playgroundState.modelSettings.modelVersion"
-                        (change)="onModelSettingsChange()"
                         class="w-full text-xs bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-white"
                       >
                         <option value="gpt-4o">GPT-4o</option>
@@ -126,7 +111,6 @@
                       <input
                         type="range"
                         [(ngModel)]="playgroundState.modelSettings.temperature"
-                        (change)="onModelSettingsChange()"
                         min="0"
                         max="2"
                         step="0.1"
@@ -141,7 +125,6 @@
                       <input
                         type="range"
                         [(ngModel)]="playgroundState.modelSettings.topP"
-                        (change)="onModelSettingsChange()"
                         min="0"
                         max="1"
                         step="0.1"
@@ -156,7 +139,6 @@
                       <input
                         type="range"
                         [(ngModel)]="playgroundState.modelSettings.frequencyPenalty"
-                        (change)="onModelSettingsChange()"
                         min="0"
                         max="2"
                         step="0.1"
@@ -171,7 +153,6 @@
                       <input
                         type="range"
                         [(ngModel)]="playgroundState.modelSettings.presencePenalty"
-                        (change)="onModelSettingsChange()"
                         min="0"
                         max="2"
                         step="0.1"
@@ -269,7 +250,7 @@
                       <span class="font-medium text-accent">Click to upload</span> or drag and drop
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-500">
-                      <span class="font-medium">Supported:</span> TXT (full support), PDF/DOC/DOCX (manual copy required)
+                      <span class="font-medium">Supported:</span> TXT, PDF, DOC, DOCX (automatic text extraction)
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-500">
                       Max 10MB

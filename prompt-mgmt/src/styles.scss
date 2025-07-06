@@ -2,8 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Angular Material Theme */
+/* Angular Material Theme - Light */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* Dark theme overrides */
+.dark-theme {
+  --mdc-filled-text-field-container-color: #374151;
+  --mdc-filled-text-field-label-text-color: #9ca3af;
+  --mdc-filled-text-field-input-text-color: #f9fafb;
+  --mdc-outlined-text-field-outline-color: #4b5563;
+  --mdc-outlined-text-field-label-text-color: #9ca3af;
+  --mdc-outlined-text-field-input-text-color: #f9fafb;
+  --mdc-elevated-card-container-color: #1f2937;
+  --mdc-outlined-card-container-color: #1f2937;
+  --mdc-filled-button-container-color: #3b82f6;
+  --mdc-filled-button-label-text-color: #ffffff;
+  --mdc-outlined-button-outline-color: #4b5563;
+  --mdc-outlined-button-label-text-color: #f9fafb;
+  --mdc-icon-button-icon-color: #f9fafb;
+  --mdc-switch-selected-track-color: #3b82f6;
+  --mdc-switch-selected-handle-color: #ffffff;
+  --mdc-switch-unselected-track-color: #4b5563;
+  --mdc-switch-unselected-handle-color: #9ca3af;
+  --mdc-checkbox-selected-checkmark-color: #ffffff;
+  --mdc-checkbox-selected-focus-icon-color: #3b82f6;
+  --mdc-checkbox-selected-hover-icon-color: #3b82f6;
+  --mdc-checkbox-selected-icon-color: #3b82f6;
+  --mdc-checkbox-unselected-focus-icon-color: #9ca3af;
+  --mdc-checkbox-unselected-hover-icon-color: #9ca3af;
+  --mdc-checkbox-unselected-icon-color: #4b5563;
+  --mdc-radio-selected-icon-color: #3b82f6;
+  --mdc-radio-unselected-icon-color: #4b5563;
+  --mdc-slider-inactive-track-color: #4b5563;
+  --mdc-slider-active-track-color: #3b82f6;
+  --mdc-slider-handle-color: #3b82f6;
+  --mdc-slider-focus-handle-color: #3b82f6;
+  --mdc-slider-hover-handle-color: #3b82f6;
+  --mdc-slider-pressed-handle-color: #3b82f6;
+  --mdc-tab-active-indicator-color: #3b82f6;
+  --mdc-tab-active-text-label-color: #3b82f6;
+  --mdc-tab-inactive-text-label-color: #9ca3af;
+  --mdc-chip-elevated-container-color: #374151;
+  --mdc-chip-elevated-label-text-color: #f9fafb;
+  --mdc-chip-outlined-outline-color: #4b5563;
+  --mdc-chip-outlined-label-text-color: #f9fafb;
+  --mdc-chip-with-trailing-icon-trailing-icon-color: #9ca3af;
+  --mdc-chip-with-leading-icon-leading-icon-color: #9ca3af;
+  --mdc-dialog-container-color: #1f2937;
+  --mdc-dialog-headline-color: #f9fafb;
+  --mdc-dialog-supporting-text-color: #d1d5db;
+  --mdc-menu-container-color: #1f2937;
+  --mdc-menu-item-label-text-color: #f9fafb;
+  --mdc-menu-item-leading-icon-color: #9ca3af;
+  --mdc-menu-item-trailing-icon-color: #9ca3af;
+  --mdc-select-focus-label-text-color: #3b82f6;
+  --mdc-select-label-text-color: #9ca3af;
+  --mdc-select-outline-color: #4b5563;
+  --mdc-select-dropdown-icon-color: #9ca3af;
+  --mdc-select-selected-text-color: #f9fafb;
+  --mdc-snackbar-container-color: #1f2937;
+  --mdc-snackbar-supporting-text-color: #f9fafb;
+  --mdc-tooltip-supporting-text-color: #f9fafb;
+  --mdc-tooltip-container-color: #374151;
+}
 
 /* Material Icons */
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Round|Material+Icons+Sharp|Material+Icons+Two+Tone');
@@ -23,6 +84,44 @@ body { margin: 0; font-family: 'Inter', sans-serif; }
 
 .dark html {
   @apply bg-slate-900;
+}
+
+/* Additional dark mode overrides for better Material compatibility */
+.dark .mat-mdc-card {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+
+.dark .mat-mdc-form-field {
+  color: #f9fafb !important;
+}
+
+.dark .mat-mdc-button {
+  color: #f9fafb !important;
+}
+
+.dark .mat-mdc-icon-button {
+  color: #f9fafb !important;
+}
+
+.dark .mat-mdc-dialog-container {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+
+.dark .mat-mdc-menu-panel {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+
+.dark .mat-mdc-select-panel {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+
+.dark .mat-mdc-tooltip {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
 }
 
 /* Custom scrollbar */
