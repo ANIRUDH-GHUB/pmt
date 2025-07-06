@@ -1,0 +1,375 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+  <!-- Header -->
+  <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Back Button -->
+        <button
+          (click)="goBackToPrompts()"
+          class="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+        >
+          <span class="material-icons text-sm">arrow_back</span>
+          <span class="text-sm font-medium">Back to Prompts</span>
+        </button>
+
+        <!-- Title -->
+        <div class="flex items-center gap-3">
+          <h1 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Playground
+          </h1>
+          <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+        </div>
+
+        <!-- Right side empty for balance -->
+        <div class="w-24"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Left Panel - Prompt Details -->
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <!-- Prompt Header -->
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+                {{ playgroundState.selectedVersion?.name }}
+              </h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                {{ playgroundState.selectedVersion?.description }}
+              </p>
+              
+              <!-- Version Selector -->
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs text-gray-500 dark:text-gray-400">Version:</span>
+                <select
+                  [value]="playgroundState.selectedVersion?.id"
+                  (change)="onVersionSelect($event)"
+                  class="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-white"
+                >
+                  <option
+                    *ngFor="let version of playgroundState.availableVersions"
+                    [value]="version.id"
+                  >
+                    v{{ version.version }} {{ version.published ? '(Published)' : '(Draft)' }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Model Settings Button -->
+              <div class="relative">
+                <button
+                  (click)="toggleModelSettings()"
+                  class="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors"
+                  matTooltip="Model Settings"
+                >
+                  <span class="material-icons text-sm">tune</span>
+                  <span>Model Settings</span>
+                </button>
+
+                <!-- Model Settings Popover -->
+                <div
+                  *ngIf="playgroundState.showModelSettings"
+                  class="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 p-4"
+                >
+                  <div class="flex items-center justify-between mb-3">
+                    <h4 class="text-sm font-medium text-gray-900 dark:text-white">Model Settings</h4>
+                    <button
+                      (click)="toggleModelSettings()"
+                      class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    >
+                      <span class="material-icons text-sm">close</span>
+                    </button>
+                  </div>
+
+                  <!-- Model Type & Version -->
+                  <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div>
+                      <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Model Type</label>
+                      <select
+                        [(ngModel)]="playgroundState.modelSettings.modelType"
+                        (change)="onModelSettingsChange()"
+                        class="w-full text-xs bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-white"
+                      >
+                        <option value="OpenAI">OpenAI</option>
+                        <option value="Anthropic">Anthropic</option>
+                        <option value="Google">Google</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Model Version</label>
+                      <select
+                        [(ngModel)]="playgroundState.modelSettings.modelVersion"
+                        (change)="onModelSettingsChange()"
+                        class="w-full text-xs bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-white"
+                      >
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        <option value="claude-3-opus">Claude-3 Opus</option>
+                        <option value="claude-3-sonnet">Claude-3 Sonnet</option>
+                        <option value="gemini-pro">Gemini Pro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Sliders -->
+                  <div class="space-y-3">
+                    <div>
+                      <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+                        <span>Temperature</span>
+                        <span>{{ playgroundState.modelSettings.temperature }}</span>
+                      </div>
+                      <input
+                        type="range"
+                        [(ngModel)]="playgroundState.modelSettings.temperature"
+                        (change)="onModelSettingsChange()"
+                        min="0"
+                        max="2"
+                        step="0.1"
+                        class="w-full"
+                      >
+                    </div>
+                    <div>
+                      <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+                        <span>Top P</span>
+                        <span>{{ playgroundState.modelSettings.topP }}</span>
+                      </div>
+                      <input
+                        type="range"
+                        [(ngModel)]="playgroundState.modelSettings.topP"
+                        (change)="onModelSettingsChange()"
+                        min="0"
+                        max="1"
+                        step="0.1"
+                        class="w-full"
+                      >
+                    </div>
+                    <div>
+                      <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+                        <span>Frequency Penalty</span>
+                        <span>{{ playgroundState.modelSettings.frequencyPenalty }}</span>
+                      </div>
+                      <input
+                        type="range"
+                        [(ngModel)]="playgroundState.modelSettings.frequencyPenalty"
+                        (change)="onModelSettingsChange()"
+                        min="0"
+                        max="2"
+                        step="0.1"
+                        class="w-full"
+                      >
+                    </div>
+                    <div>
+                      <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+                        <span>Presence Penalty</span>
+                        <span>{{ playgroundState.modelSettings.presencePenalty }}</span>
+                      </div>
+                      <input
+                        type="range"
+                        [(ngModel)]="playgroundState.modelSettings.presencePenalty"
+                        (change)="onModelSettingsChange()"
+                        min="0"
+                        max="2"
+                        step="0.1"
+                        class="w-full"
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prompt Metadata -->
+          <div class="space-y-2 mb-4">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500 dark:text-gray-400">Use Case:</span>
+              <span class="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
+                {{ playgroundState.selectedVersion?.useCase }}
+              </span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500 dark:text-gray-400">Sub Use Case:</span>
+              <span class="text-xs bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-2 py-1 rounded">
+                {{ playgroundState.selectedVersion?.subUseCase }}
+              </span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500 dark:text-gray-400">Report Type:</span>
+              <span class="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-2 py-1 rounded">
+                {{ playgroundState.selectedVersion?.reportType }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Prompt Sections -->
+          <div class="space-y-3">
+            <h4 class="text-sm font-medium text-gray-900 dark:text-white">Prompt Sections</h4>
+            <div class="space-y-2">
+              <div
+                *ngFor="let section of playgroundState.selectedVersion?.promptSections"
+                class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              >
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-xs font-medium text-gray-700 dark:text-gray-300">
+                    {{ section?.sectionName }}
+                      <!-- Title placeholder -->
+                  </span>
+                </div>
+                <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-3">
+                  {{ section?.sectionText }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel - Input/Output -->
+      <div class="lg:col-span-2">
+        <div class="space-y-6">
+          <!-- Input Section -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Input</h3>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ getCharacterCount(playgroundState.inputText) }} chars
+                </span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ getWordCount(playgroundState.inputText) }} words
+                </span>
+              </div>
+            </div>
+
+            <!-- File Upload -->
+            <div class="mb-4">
+              <div class="relative">
+                <input
+                  type="file"
+                  (change)="onFileUpload($event)"
+                  accept=".txt,.pdf,.doc,.docx"
+                  class="hidden"
+                  #fileInput
+                >
+                <div
+                  (click)="fileInput.click()"
+                  (dragover)="onDragOver($event)"
+                  (dragleave)="onDragLeave($event)"
+                  (drop)="onDrop($event)"
+                  class="w-full p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-accent dark:hover:border-accent transition-all duration-200 text-center cursor-pointer file-upload-area"
+                >
+                  <div class="flex flex-col items-center gap-2">
+                    <span class="material-icons text-gray-400 text-2xl">cloud_upload</span>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                      <span class="font-medium text-accent">Click to upload</span> or drag and drop
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-500">
+                      <span class="font-medium">Supported:</span> TXT (full support), PDF/DOC/DOCX (manual copy required)
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-500">
+                      Max 10MB
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Uploaded File Info -->
+              <div *ngIf="playgroundState.uploadedFileName" class="mt-2 flex items-center gap-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <span class="material-icons text-green-600 dark:text-green-400 text-sm">check_circle</span>
+                <span class="text-sm text-green-700 dark:text-green-300">{{ playgroundState.uploadedFileName }}</span>
+                <button
+                  (click)="onClearInput()"
+                  class="ml-auto p-1 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200 transition-colors"
+                >
+                  <span class="material-icons text-sm">close</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Text Input -->
+            <div class="mb-4">
+              <textarea
+                [(ngModel)]="playgroundState.inputText"
+                placeholder="Enter your input text here..."
+                rows="8"
+                class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-transparent resize-none"
+              ></textarea>
+            </div>
+
+            <!-- Generate Button -->
+            <button
+              (click)="onGenerateOutput()"
+              [disabled]="playgroundState.isGenerating || !playgroundState.inputText.trim()"
+              class="w-full bg-accent hover:bg-accent/90 disabled:bg-gray-300 dark:disabled:bg-gray-600 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
+            >
+              <span *ngIf="!playgroundState.isGenerating" class="flex items-center justify-center gap-2">
+                <span class="material-icons text-sm">play_arrow</span>
+                Generate Output
+              </span>
+              <span *ngIf="playgroundState.isGenerating" class="flex items-center justify-center gap-2">
+                <span class="material-icons text-sm animate-spin">sync</span>
+                Generating...
+              </span>
+            </button>
+
+            <!-- Progress Bar -->
+            <div *ngIf="playgroundState.isGenerating" class="mt-4">
+              <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+                <span>Progress</span>
+                <span>{{ playgroundState.progress.toFixed(0) }}%</span>
+              </div>
+              <mat-progress-bar
+                [value]="playgroundState.progress"
+                mode="determinate"
+                class="w-full"
+              ></mat-progress-bar>
+            </div>
+          </div>
+
+          <!-- Output Section -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Output</h3>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ getCharacterCount(playgroundState.outputText) }} chars
+                </span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ getWordCount(playgroundState.outputText) }} words
+                </span>
+                <button
+                  (click)="onCopyOutput()"
+                  *ngIf="playgroundState.outputText"
+                  class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  matTooltip="Copy to clipboard"
+                >
+                  <span class="material-icons text-sm">content_copy</span>
+                </button>
+                <button
+                  (click)="onClearOutput()"
+                  *ngIf="playgroundState.outputText"
+                  class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  matTooltip="Clear output"
+                >
+                  <span class="material-icons text-sm">clear</span>
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white min-h-[200px] whitespace-pre-wrap"
+              [class.text-gray-500]="!playgroundState.outputText"
+            >
+              {{ playgroundState.outputText || 'Generated output will appear here...' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

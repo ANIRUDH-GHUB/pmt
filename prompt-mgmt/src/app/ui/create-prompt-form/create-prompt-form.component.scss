@@ -1,0 +1,77 @@
+.create-prompt-form {
+  .form-header {
+    h2 {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .form-content {
+    section {
+      h3 {
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1.5rem;
+        
+        .dark & {
+          border-bottom-color: #374151;
+        }
+        
+        .material-icons {
+          font-size: 1.25rem;
+        }
+      }
+    }
+  }
+
+  .form-actions {
+    .flex {
+      @media (max-width: 640px) {
+        flex-direction: column-reverse;
+        
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  // Error styling
+  .bg-red-50 {
+    .dark & {
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+  }
+
+  .border-red-200 {
+    .dark & {
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+  }
+
+  // Grid responsive adjustments
+  .grid {
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Section spacing
+  section {
+    &:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+  }
+
+  // Button hover effects
+  button {
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+} 

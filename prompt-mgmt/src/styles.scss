@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Angular Material Theme */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* Material Icons */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Round|Material+Icons+Sharp|Material+Icons+Two+Tone');
+
+/* Global styles */
+html, body { height: 100%; }
+body { margin: 0; font-family: 'Inter', sans-serif; }
+
+/* Dark mode styles */
+.dark {
+  @apply bg-slate-900 text-white;
+}
+
+.dark body {
+  @apply bg-slate-900 text-white;
+}
+
+.dark html {
+  @apply bg-slate-900;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Agenta.ai specific styles */
+.bg-accent {
+  background-color: #1c2c3d;
+}
+
+.hover\:bg-blue-700:hover {
+  background-color: #1e40af;
+}
+
+.bg-sidebar {
+  background-color: #0f172a;
+}
+
+.bg-bg {
+  background-color: #f8fafc;
+}
+
+/* Material Icons styling */
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}

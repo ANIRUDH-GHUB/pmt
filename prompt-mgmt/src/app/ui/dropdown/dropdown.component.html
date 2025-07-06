@@ -1,0 +1,130 @@
+<div class="dropdown-container relative" [class]="width">
+  <!-- Dropdown Trigger Button -->
+  <button
+    type="button"
+    [class]="'w-full flex items-center justify-between rounded-lg transition-all duration-200 ' + sizeClasses + ' ' + variantClasses"
+    [class.opacity-50]="disabled"
+    [class.cursor-not-allowed]="disabled"
+    [class.cursor-pointer]="!disabled"
+    (click)="toggleDropdown($event)"
+    [attr.aria-expanded]="isOpen"
+    [attr.aria-haspopup]="true"
+    [attr.aria-label]="placeholder"
+  >
+    <!-- Selected Item Display -->
+    <div class="flex items-center gap-2 min-w-0 flex-1">
+      <span 
+        class="truncate"
+        [class.text-gray-500]="!selectedItem"
+        [class.text-gray-900]="selectedItem && !disabled"
+        [class.dark:text-gray-400]="!selectedItem"
+        [class.dark:text-white]="selectedItem && !disabled"
+      >
+        {{ displayText }}
+      </span>
+    </div>
+    
+    <!-- Dropdown Arrow Icon -->
+    <span 
+      class="material-icons text-gray-400 dark:text-gray-500 transition-transform duration-200 flex-shrink-0"
+      [class.rotate-180]="isOpen"
+    >
+      expand_more
+    </span>
+  </button>
+
+  <!-- Dropdown Menu -->
+  <div
+    *ngIf="isOpen"
+    class="absolute top-full left-0 right-0 mt-1 z-50 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 overflow-hidden"
+    [class]="maxHeight"
+  >
+    <!-- Search Input (if searchable) -->
+    <div *ngIf="searchable" class="p-2 border-b border-gray-200 dark:border-gray-700">
+      <div class="relative">
+        <input
+          type="text"
+          class="w-full px-3 py-2 pl-8 pr-8 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+          placeholder="Search..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchInput($event)"
+        >
+        <span class="absolute left-2.5 top-2.5 material-icons text-gray-400 text-sm">search</span>
+        <button
+          *ngIf="searchTerm"
+          type="button"
+          class="absolute right-2.5 top-2.5 material-icons text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-sm"
+          (click)="clearSearch()"
+        >
+          close
+        </button>
+      </div>
+    </div>
+
+    <!-- Dropdown Items -->
+    <div class="overflow-y-auto" [class]="maxHeight">
+      <div
+        *ngFor="let item of filteredItems; trackBy: trackByFn"
+        class="relative"
+      >
+        <!-- Divider -->
+        <div
+          *ngIf="item.divider"
+          class="h-px bg-gray-300 dark:bg-gray-700 my-1"
+        ></div>
+        
+        <!-- Regular Item -->
+        <button
+          *ngIf="!item.divider"
+          type="button"
+          class="w-full flex items-center gap-3 px-4 py-2 text-left text-sm transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          [class.text-gray-900]="!item.disabled"
+          [class.dark:text-white]="!item.disabled"
+          [class.text-gray-500]="item.disabled"
+          [class.dark:text-gray-400]="item.disabled"
+          [class.dark:bg-accent]="selectedItem?.id === item.id"
+          [class.text-accent]="selectedItem?.id === item.id"
+          [disabled]="item.disabled"
+          (click)="selectItem(item, $event)"
+        >
+          <!-- Item Icon -->
+          <span
+            *ngIf="showIcon && item.icon"
+            class="material-icons text-base flex-shrink-0"
+            [class.text-gray-400]="!selectedItem || selectedItem.id !== item.id"
+            [class.text-accent]="selectedItem?.id === item.id"
+          >
+            {{ item.icon }}
+          </span>
+          
+          <!-- Item Label -->
+          <span class="truncate flex-1">{{ item.label }}</span>
+          
+          <!-- Selected Checkmark -->
+          <span
+            *ngIf="selectedItem?.id === item.id"
+            class="material-icons text-accent text-base flex-shrink-0"
+          >
+            check
+          </span>
+        </button>
+      </div>
+      
+      <!-- No Results Message -->
+      <div
+        *ngIf="searchable && searchTerm && filteredItems.length === 0"
+        class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center"
+      >
+        No results found
+      </div>
+      
+      <!-- Empty State -->
+      <div
+        *ngIf="!searchable && items.length === 0"
+        class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center"
+      >
+        No options available
+      </div>
+    </div>
+  </div>
+</div> 

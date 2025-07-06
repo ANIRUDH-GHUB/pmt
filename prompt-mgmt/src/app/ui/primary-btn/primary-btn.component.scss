@@ -1,0 +1,17 @@
+:host {
+  display: inline-block;
+}
+
+button[mat-raised-button] {
+  background-color: #1c2c3d;
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: #1e40af;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+} 

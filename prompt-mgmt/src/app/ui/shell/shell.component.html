@@ -1,0 +1,62 @@
+<mat-sidenav-container class="h-screen">
+  <!-- Sidenav -->
+  <mat-sidenav 
+    #sidenav 
+    [opened]="sidenavOpened" 
+    mode="side" 
+    class="w-64 bg-sidebar text-sidebarText border-r border-sidebarBorder dark:bg-gray-950 dark:text-gray-200 dark:border-gray-800"
+    [class.dark]="isDarkMode">
+    
+    <!-- Logo/Brand -->
+    <div class="p-6 border-b border-sidebarBorder dark:border-gray-800">
+      <h1 class="text-xl font-bold text-sidebarSelected dark:text-white">Agenta.ai</h1>
+    </div>
+
+    <!-- Navigation Items -->
+    <mat-nav-list class="p-4">
+      <app-sidenav-item 
+        icon="dashboard" 
+        label="Dashboard" 
+        route="/dashboard">
+      </app-sidenav-item>
+      
+      <app-sidenav-item 
+        icon="chat" 
+        label="Prompts" 
+        route="/prompts">
+      </app-sidenav-item>
+      
+      <app-sidenav-item 
+        icon="settings" 
+        label="Settings" 
+        route="/settings">
+      </app-sidenav-item>
+      
+      <app-sidenav-item 
+        icon="analytics" 
+        label="Analytics" 
+        route="/analytics">
+      </app-sidenav-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content class="bg-bg dark:bg-gray-900">
+    <!-- Toolbar -->
+    <mat-toolbar class="bg-cardBg border-b border-cardBorder dark:bg-gray-900 dark:border-gray-800">
+      <button 
+        mat-icon-button 
+        (click)="toggleSidenav()"
+        class="mr-4">
+        <mat-icon>menu</mat-icon>
+      </button>
+      
+      <span class="flex-1"></span>
+    </mat-toolbar>
+
+    <!-- Page Content -->
+    <div class="p-6">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container> 

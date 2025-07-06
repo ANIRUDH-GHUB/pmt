@@ -1,0 +1,83 @@
+<div class="input-field-container" [class]="containerClasses">
+  <!-- Label -->
+  <label 
+    *ngIf="config.label"
+    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+  >
+    {{ config.label }}
+    <span *ngIf="isRequired" class="text-red-500 ml-1">*</span>
+  </label>
+
+  <!-- Input Container -->
+  <div class="relative">
+    <!-- Icon (if provided) -->
+    <span 
+      *ngIf="config.icon"
+      class="absolute left-3 top-1/2 transform -translate-y-1/2 material-icons text-gray-400 dark:text-gray-500 text-lg pointer-events-none"
+    >
+      {{ config.icon }}
+    </span>
+
+    <!-- Text Input -->
+    <input
+      *ngIf="config.type !== 'textarea'"
+      [type]="config.type || 'text'"
+      [value]="value"
+      [placeholder]="config.placeholder"
+      [required]="isRequired"
+      [disabled]="config.disabled"
+      [readonly]="config.readonly"
+      [attr.maxlength]="config.maxLength"
+      [attr.minlength]="config.minLength"
+      [pattern]="config.pattern"
+      [class.pl-10]="config.icon"
+      [class]="inputClasses"
+      (input)="onInput($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+    >
+
+    <!-- Textarea -->
+    <textarea
+      *ngIf="config.type === 'textarea'"
+      [value]="value"
+      [placeholder]="config.placeholder"
+      [required]="isRequired"
+      [disabled]="config.disabled"
+      [readonly]="config.readonly"
+      [attr.maxlength]="config.maxLength"
+      [attr.minlength]="config.minLength"
+      [rows]="4"
+      [class.pl-10]="config.icon"
+      [class]="inputClasses"
+      (input)="onInput($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+    ></textarea>
+
+    <!-- Character Count (if maxLength is set) -->
+    <div 
+      *ngIf="config.maxLength"
+      class="absolute bottom-2 right-2 text-xs text-gray-400 dark:text-gray-500"
+    >
+      {{ value.length }}/{{ config.maxLength }}
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div 
+    *ngIf="hasError"
+    class="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center gap-1"
+  >
+    <span class="material-icons text-sm">error</span>
+    {{ error }}
+  </div>
+
+  <!-- Help Text -->
+  <div 
+    *ngIf="config.helpText && !hasError"
+    class="mt-1 text-sm text-gray-500 dark:text-gray-400"
+  >
+    {{ config.helpText }}
+  </div>
+</div> 

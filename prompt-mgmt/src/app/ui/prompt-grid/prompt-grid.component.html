@@ -1,0 +1,3 @@
+<div class="w-full grid grid-cols-1 gap-8" style="grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));">
+  <app-prompt-card *ngFor="let prompt of prompts" [prompt]="prompt" (edit)="onEdit($event)"></app-prompt-card>
+</div> 

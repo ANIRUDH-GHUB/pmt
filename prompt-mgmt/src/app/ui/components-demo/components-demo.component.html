@@ -1,0 +1,90 @@
+<div class="components-demo-container p-6 max-w-4xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">UI Components Demo</h1>
+
+  <!-- Input Field Examples -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Input Field Component</h2>
+    <div class="grid gap-6">
+      <div *ngFor="let config of inputFieldConfigs" class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <app-input-field
+          [config]="config"
+          [value]="inputValues[config.label]"
+          (valueChange)="onInputChange(config.label, $event)"
+        ></app-input-field>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slider Input Examples -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Slider Input Component</h2>
+    <div class="grid gap-6">
+      <div *ngFor="let config of sliderConfigs" class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <app-slider-input
+          [config]="config"
+          [value]="sliderValues[config.label]"
+          (valueChange)="onSliderChange(config.label, $event)"
+        ></app-slider-input>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tab Section Example -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Tab Section Component</h2>
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <app-tab-section
+        [config]="tabSectionConfig"
+        [sections]="sections"
+        [activeSectionId]="activeSectionId"
+        (sectionsChange)="onSectionsChange($event)"
+        (activeSectionChange)="onActiveSectionChange($event)"
+        (sectionAdd)="onSectionAdd($event)"
+        (sectionRemove)="onSectionRemove($event)"
+        (sectionUpdate)="onSectionUpdate($event)"
+      ></app-tab-section>
+    </div>
+  </section>
+
+  <!-- Current Values Display -->
+  <section class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Current Values</h2>
+    
+    <!-- Input Values -->
+    <div class="mb-4">
+      <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Input Fields:</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+        <div *ngFor="let [key, value] of Object.entries(inputValues)" class="bg-white dark:bg-gray-800 p-2 rounded border">
+          <span class="font-medium text-gray-600 dark:text-gray-400">{{ key }}:</span>
+          <span class="ml-2 text-gray-900 dark:text-white">{{ value || '(empty)' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slider Values -->
+    <div class="mb-4">
+      <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Slider Values:</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+        <div *ngFor="let [key, value] of Object.entries(sliderValues)" class="bg-white dark:bg-gray-800 p-2 rounded border">
+          <span class="font-medium text-gray-600 dark:text-gray-400">{{ key }}:</span>
+          <span class="ml-2 text-gray-900 dark:text-white">{{ value }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Section Info -->
+    <div>
+      <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Tab Sections:</h3>
+      <div class="bg-white dark:bg-gray-800 p-3 rounded border">
+        <div class="text-sm">
+          <span class="font-medium text-gray-600 dark:text-gray-400">Active Section:</span>
+          <span class="ml-2 text-gray-900 dark:text-white">{{ activeSectionId }}</span>
+        </div>
+        <div class="text-sm mt-1">
+          <span class="font-medium text-gray-600 dark:text-gray-400">Total Sections:</span>
+          <span class="ml-2 text-gray-900 dark:text-white">{{ sections.length }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div> 

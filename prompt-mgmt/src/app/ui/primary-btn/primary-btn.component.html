@@ -1,0 +1,9 @@
+<button 
+  mat-raised-button 
+  [disabled]="disabled"
+  [type]="type"
+  class="bg-primary hover:bg-primaryHover text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+  
+  <mat-icon *ngIf="icon" class="mr-2 text-accent">{{ icon }}</mat-icon>
+  <ng-content></ng-content>
+</button> 

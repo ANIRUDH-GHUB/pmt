@@ -1,0 +1,50 @@
+// Filter bar animations and focus states
+.filter-bar {
+  // Smooth transitions for filter changes
+  transition: all 0.2s ease-in-out;
+}
+
+// Search input focus state
+input:focus {
+  box-shadow: 0 0 0 2px #6941C6;
+}
+
+// Filter badge hover effects
+.filter-badge {
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Clear button hover effect
+.clear-button {
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .dropdown-container {
+    width: 100%;
+  }
+}
+
+// Dark mode specific adjustments
+.dark {
+  .filter-badge {
+    &:hover {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+  }
+} 

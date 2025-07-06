@@ -1,0 +1,74 @@
+<div class="slider-input-container" [class]="containerClasses">
+  <!-- Label -->
+  <label 
+    *ngIf="config.label"
+    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+  >
+    {{ config.label }}
+  </label>
+
+  <!-- Slider and Input Container -->
+  <div class="flex items-center gap-4">
+    <!-- Slider -->
+    <div class="flex-1">
+      <input
+        #slider
+        type="range"
+        [min]="config.min"
+        [max]="config.max"
+        [step]="step"
+        [value]="value"
+        [disabled]="config.disabled"
+        [class]="sliderClasses"
+        (input)="onSliderChange($event)"
+      >
+      
+      <!-- Min/Max Labels -->
+      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+        <span>{{ config.min }}{{ config.unit }}</span>
+        <span>{{ config.max }}{{ config.unit }}</span>
+      </div>
+    </div>
+
+    <!-- Input Box -->
+    <div *ngIf="showInput" class="flex items-center gap-1">
+      <input
+        type="number"
+        [min]="config.min"
+        [max]="config.max"
+        [step]="step"
+        [value]="inputValue"
+        [disabled]="config.disabled"
+        [class]="inputClasses"
+        (input)="onInputChange($event)"
+        (focus)="onInputFocus()"
+        (blur)="onInputBlur()"
+      >
+      <span *ngIf="config.unit" class="text-sm text-gray-500 dark:text-gray-400">
+        {{ config.unit }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Current Value Display -->
+  <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+    Current: {{ value }}{{ config.unit }}
+  </div>
+
+  <!-- Error Message -->
+  <div 
+    *ngIf="hasError"
+    class="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center gap-1"
+  >
+    <span class="material-icons text-sm">error</span>
+    {{ error }}
+  </div>
+
+  <!-- Help Text -->
+  <div 
+    *ngIf="config.helpText && !hasError"
+    class="mt-1 text-sm text-gray-500 dark:text-gray-400"
+  >
+    {{ config.helpText }}
+  </div>
+</div> 

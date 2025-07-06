@@ -1,0 +1,26 @@
+:host {
+  display: inline-block;
+}
+
+button[mat-stroked-button] {
+  border-color: #d1d5db;
+  color: #374151;
+  
+  &:hover:not(:disabled) {
+    background-color: #f9fafb;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .dark & {
+    border-color: #4b5563;
+    color: #d1d5db;
+    
+    &:hover:not(:disabled) {
+      background-color: #374151;
+    }
+  }
+} 

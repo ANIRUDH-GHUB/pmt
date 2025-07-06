@@ -1,0 +1,9 @@
+<button 
+  mat-stroked-button 
+  [disabled]="disabled"
+  [type]="type"
+  class="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+ 
+  <mat-icon *ngIf="icon" class="mr-2">{{ icon }}</mat-icon>
+  <ng-content></ng-content>
+</button> 

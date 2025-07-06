@@ -1,0 +1,81 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-cardTitle dark:text-white">Dashboard</h1>
+      <p class="text-cardSubtitle mt-1 dark:text-gray-300">Welcome to your Agenta.ai dashboard</p>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <app-outline-btn icon="settings" (click)="toggleVariablePanel()">
+        Variables
+      </app-outline-btn>
+      <app-primary-btn icon="add">
+        New Prompt
+      </app-primary-btn>
+    </div>
+  </div>
+
+  <!-- Metrics Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <app-metrics-card 
+      *ngFor="let metric of metrics"
+      [title]="metric.title"
+      [value]="metric.value"
+      [series]="metric.series">
+    </app-metrics-card>
+  </div>
+
+  <!-- Content Cards -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Recent Activity -->
+    <div class="bg-cardBg rounded-lg shadow-sm border border-cardBorder p-6 dark:bg-gray-800 dark:border-gray-700">
+      <h2 class="text-lg font-semibold text-cardTitle mb-4 dark:text-white">Recent Activity</h2>
+      <div class="space-y-4">
+        <div class="flex items-center gap-3 p-3 bg-sidebarAvatar rounded-lg dark:bg-gray-900">
+          <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-cardTitle dark:text-white">New prompt created</p>
+            <p class="text-xs text-cardSubtitle dark:text-gray-300">2 minutes ago</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-sidebarAvatar rounded-lg dark:bg-gray-900">
+          <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-cardTitle dark:text-white">User logged in</p>
+            <p class="text-xs text-cardSubtitle dark:text-gray-300">5 minutes ago</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-sidebarAvatar rounded-lg dark:bg-gray-900">
+          <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-cardTitle dark:text-white">Prompt updated</p>
+            <p class="text-xs text-cardSubtitle dark:text-gray-300">10 minutes ago</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-cardBg rounded-lg shadow-sm border border-cardBorder p-6 dark:bg-gray-800 dark:border-gray-700">
+      <h2 class="text-lg font-semibold text-cardTitle mb-4 dark:text-white">Quick Actions</h2>
+      <div class="space-y-3">
+        <app-primary-btn icon="add" class="w-full justify-center">
+          Create New Prompt
+        </app-primary-btn>
+        <app-outline-btn icon="upload" class="w-full justify-center">
+          Import Prompts
+        </app-outline-btn>
+        <app-outline-btn icon="download" class="w-full justify-center">
+          Export Data
+        </app-outline-btn>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Variable Panel -->
+<app-variable-panel 
+  [variables]="promptVariables"
+  [opened]="variablePanelOpened">
+</app-variable-panel> 

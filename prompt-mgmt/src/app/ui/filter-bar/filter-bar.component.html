@@ -1,0 +1,155 @@
+<div class="bg-gray-200 dark:bg-slate-800 border-b border-gray-300 dark:border-gray-700 px-4 sm:px-8 py-4">
+  <div class="max-w-[1600px] mx-auto">
+    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+      <!-- Create Prompt Button -->
+      <button
+        (click)="onCreatePrompt()"
+        class="flex items-center gap-2 px-4 py-2.5 bg-accent hover:bg-accent/90 text-white rounded-lg transition-colors duration-200 shadow-sm text-sm font-medium whitespace-nowrap"
+      >
+        <span class="material-icons text-base">add</span>
+        <span class="hidden sm:inline">Create Prompt</span>
+        <span class="sm:hidden">Create</span>
+      </button>
+
+      <!-- Search Input -->
+      <div class="flex-1 min-w-0">
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 transform -translate-y-1/2 material-icons text-gray-400 text-lg">search</span>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchChange()"
+            placeholder="Search prompts by name..."
+            class="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-slate-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200 shadow-sm"
+          >
+          <button
+            *ngIf="searchTerm"
+            type="button"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 material-icons text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-lg transition-colors duration-200"
+            (click)="searchTerm = ''; onSearchChange()"
+          >
+            close
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Dropdowns -->
+      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <!-- My Prompts Filter -->
+        <button
+          (click)="toggleMyPrompts()"
+          [class.bg-accent]="showMyPromptsOnly"
+          [class.text-white]="showMyPromptsOnly"
+          [class.bg-white]="!showMyPromptsOnly"
+          [class.dark:bg-slate-700]="!showMyPromptsOnly"
+          [class.text-gray-700]="!showMyPromptsOnly"
+          [class.dark:text-gray-300]="!showMyPromptsOnly"
+          class="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-accent/10 dark:hover:bg-slate-600 transition-colors duration-200 shadow-sm text-sm font-medium"
+        >
+          <span class="material-icons text-base">person</span>
+          <span class="hidden sm:inline">My Prompts</span>
+          <span class="sm:hidden">Mine</span>
+          <span class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 text-xs px-1.5 py-0.5 rounded-full">
+            {{ myPromptsCount }}
+          </span>
+        </button>
+
+        <!-- Use Case Filter -->
+        <div class="w-full sm:w-48">
+          <app-dropdown
+            [items]="useCaseItems"
+            [selectedItem]="selectedUseCase"
+            placeholder="All Use Cases"
+            (selectionChange)="onUseCaseChange($event)"
+            [showIcon]="true"
+            [variant]="'outline'"
+            [size]="'md'"
+          ></app-dropdown>
+        </div>
+
+        <!-- Sub Use Case Filter -->
+        <div class="w-full sm:w-48">
+          <app-dropdown
+            [items]="subUseCaseItems"
+            [selectedItem]="selectedSubUseCase"
+            placeholder="All Sub Types"
+            (selectionChange)="onSubUseCaseChange($event)"
+            [showIcon]="true"
+            [variant]="'outline'"
+            [size]="'md'"
+          ></app-dropdown>
+        </div>
+
+        <!-- Clear Filters Button -->
+        <button
+          *ngIf="hasActiveFilters"
+          type="button"
+          (click)="clearFilters()"
+          class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 bg-white dark:bg-slate-700 hover:bg-gray-100 dark:hover:bg-slate-600 rounded-lg transition-colors duration-200 border border-gray-300 dark:border-gray-600 shadow-sm"
+        >
+          <span class="material-icons text-base">clear_all</span>
+          <span class="hidden sm:inline">Clear Filters</span>
+          <span class="sm:hidden">Clear</span>
+          <span *ngIf="activeFilterCount > 0" class="bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 text-xs px-1.5 py-0.5 rounded-full">
+            {{ activeFilterCount }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Filters Display -->
+    <div *ngIf="hasActiveFilters" class="flex flex-wrap gap-2 mt-3">
+      <!-- My Prompts Filter Badge -->
+      <div *ngIf="showMyPromptsOnly" class="flex items-center gap-1.5 px-3 py-1.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm shadow-sm">
+        <span class="material-icons text-base">person</span>
+        <span>My Prompts Only</span>
+        <button
+          type="button"
+          class="material-icons text-base hover:text-purple-500 transition-colors"
+          (click)="toggleMyPrompts()"
+        >
+          close
+        </button>
+      </div>
+
+      <!-- Search Filter Badge -->
+      <div *ngIf="searchTerm" class="flex items-center gap-1.5 px-3 py-1.5 bg-accent/10 text-accent rounded-full text-sm shadow-sm">
+        <span class="material-icons text-base">search</span>
+        <span>"{{ searchTerm }}"</span>
+        <button
+          type="button"
+          class="material-icons text-base hover:text-accent/70 transition-colors"
+          (click)="searchTerm = ''; onSearchChange()"
+        >
+          close
+        </button>
+      </div>
+
+      <!-- Use Case Filter Badge -->
+      <div *ngIf="selectedUseCase && selectedUseCase.label !== 'All'" class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm shadow-sm">
+        <span class="material-icons text-base">category</span>
+        <span>{{ selectedUseCase.label }}</span>
+        <button
+          type="button"
+          class="material-icons text-base hover:text-blue-500 transition-colors"
+          (click)="onUseCaseChange({ id: 'All', label: 'All' })"
+        >
+          close
+        </button>
+      </div>
+
+      <!-- Sub Use Case Filter Badge -->
+      <div *ngIf="selectedSubUseCase && selectedSubUseCase.label !== 'All'" class="flex items-center gap-1.5 px-3 py-1.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm shadow-sm">
+        <span class="material-icons text-base">subdirectory_arrow_right</span>
+        <span>{{ selectedSubUseCase.label }}</span>
+        <button
+          type="button"
+          class="material-icons text-base hover:text-green-500 transition-colors"
+          (click)="onSubUseCaseChange({ id: 'All', label: 'All' })"
+        >
+          close
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,11 @@
+<app-modal [isOpen]="isOpen" (close)="onClose()">
+  <app-create-prompt-form
+    [initialData]="initialData"
+    [isEditMode]="isEditMode"
+    [availableVersions]="availableVersions"
+    [currentVersion]="currentVersion"
+    (save)="onSave($event)"
+    (publish)="onPublish($event)"
+    (cancel)="onClose()"
+  ></app-create-prompt-form>
+</app-modal> 

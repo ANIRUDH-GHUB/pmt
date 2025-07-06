@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+mat-sidenav-container {
+  height: 100%;
+}
+
+mat-sidenav {
+  background-color: #0f172a;
+  
+  .mat-nav-list {
+    padding: 0;
+  }
+}
+
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.dark {
+  mat-sidenav {
+    background-color: #1e293b;
+  }
+  
+  mat-toolbar {
+    background-color: #1e293b;
+  }
+} 

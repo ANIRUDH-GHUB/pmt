@@ -1,0 +1,34 @@
+<div *ngIf="isOpen" [class]="backdropClasses" (click)="onBackdropClick($event)">
+  <div [class]="modalClasses">
+    <!-- Modal Header -->
+    <div *ngIf="showTitle || showCloseButton" class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+      <h2 *ngIf="showTitle" class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-3">
+        {{ config.title }}
+        <button
+          *ngIf="showCloseButton"
+          type="button"
+          (click)="closeModal()"
+          class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+          aria-label="Close modal"
+        >
+          <span class="material-icons text-lg">close</span>
+        </button>
+      </h2>
+      <div *ngIf="!showTitle && showCloseButton">
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+          aria-label="Close modal"
+        >
+          <span class="material-icons text-xl">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Content -->
+    <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div> 

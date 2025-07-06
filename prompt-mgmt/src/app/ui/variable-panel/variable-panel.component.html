@@ -1,0 +1,64 @@
+<mat-sidenav 
+  #variableSidenav 
+  [opened]="opened" 
+  mode="side" 
+  position="end"
+  class="w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700">
+  
+  <!-- Header -->
+  <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Prompt Variables</h2>
+      <button mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+      {{ variables.length }} variable{{ variables.length !== 1 ? 's' : '' }}
+    </p>
+  </div>
+
+  <!-- Variables List -->
+  <div class="p-4">
+    <mat-list>
+      <mat-list-item *ngFor="let variable of variables" class="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div class="w-full">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center">
+              <mat-icon class="text-gray-400 mr-2">{{ getTypeIcon(variable.type) }}</mat-icon>
+              <span class="font-medium text-gray-900 dark:text-white">{{ variable.name }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span 
+                class="px-2 py-1 text-xs font-medium rounded-full {{ getTypeColor(variable.type) }}">
+                {{ variable.type }}
+              </span>
+              <span 
+                *ngIf="variable.required" 
+                class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
+                Required
+              </span>
+            </div>
+          </div>
+          
+          <p *ngIf="variable.description" class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+            {{ variable.description }}
+          </p>
+          
+          <div *ngIf="variable.defaultValue !== undefined" class="text-sm">
+            <span class="text-gray-500 dark:text-gray-400">Default: </span>
+            <code class="bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded text-xs">
+              {{ variable.defaultValue }}
+            </code>
+          </div>
+        </div>
+      </mat-list-item>
+    </mat-list>
+    
+    <!-- Empty State -->
+    <div *ngIf="variables.length === 0" class="text-center py-8">
+      <mat-icon class="text-gray-400 text-4xl mb-4">code</mat-icon>
+      <p class="text-gray-500 dark:text-gray-400">No variables defined</p>
+    </div>
+  </div>
+</mat-sidenav> 

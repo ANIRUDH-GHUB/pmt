@@ -1,0 +1,54 @@
+<app-header [isDarkMode]="(isDarkMode$ | async) ?? false" (darkModeToggle)="toggleDarkMode()"></app-header>
+
+<app-filter-bar 
+  [prompts]="filteredPrompts" 
+  [currentUser]="currentUser" 
+  (filterChange)="onFilterChange($event)" 
+  (createPrompt)="onCreatePrompt()">
+</app-filter-bar>
+
+<div class="w-full flex justify-center py-8">
+  <div class="w-full max-w-[1600px]">
+    <div *ngIf="promptLoading$ | async" class="flex justify-center items-center py-8">
+      <mat-spinner></mat-spinner>
+    </div>
+    
+    <div *ngIf="promptError$ | async as error" class="text-red-500 text-center py-4">
+      {{ error }}
+    </div>
+    
+    <app-prompt-grid 
+      *ngIf="!(promptLoading$ | async)"
+      [prompts]="filteredPrompts" 
+      [currentUser]="currentUser" 
+      (editPrompt)="onEditPrompt($event)">
+    </app-prompt-grid>
+  </div>
+</div>
+
+<ng-container *ngIf="(isModalOpen$ | async) as isModalOpen">
+  <ng-container *ngIf="(editingPrompt$ | async) as editingPrompt">
+    <app-create-prompt-modal
+      [isOpen]="isModalOpen"
+      [initialData]="editingPrompt ? convertPromptToFormData(editingPrompt) : null"
+      [isEditMode]="(isEditMode$ | async) ?? false"
+      [availableVersions]="getAvailableVersions(editingPrompt)"
+      [currentVersion]="editingPrompt.version.toString()"
+      (save)="onSavePrompt($event)"
+      (publish)="onPublishPrompt($event)"
+      (close)="onCloseCreatePromptModal()"
+    ></app-create-prompt-modal>
+  </ng-container>
+  <ng-container *ngIf="!(editingPrompt$ | async)">
+    <app-create-prompt-modal
+      [isOpen]="isModalOpen"
+      [initialData]="null"
+      [isEditMode]="false"
+      [availableVersions]="[]"
+      [currentVersion]="'1.0'"
+      (save)="onSavePrompt($event)"
+      (publish)="onPublishPrompt($event)"
+      (close)="onCloseCreatePromptModal()"
+    ></app-create-prompt-modal>
+  </ng-container>
+</ng-container> 

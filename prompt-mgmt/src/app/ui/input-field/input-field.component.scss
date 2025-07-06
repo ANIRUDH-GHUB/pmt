@@ -1,0 +1,42 @@
+.input-field-container {
+  .material-icons {
+    font-size: 1.125rem;
+    line-height: 1;
+  }
+
+  input, textarea {
+    resize: vertical;
+    
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+    
+    &:disabled {
+      background-color: #f9fafb;
+      color: #6b7280;
+      cursor: not-allowed;
+      
+      &::placeholder {
+        color: #9ca3af;
+      }
+    }
+  }
+
+  textarea {
+    min-height: 6rem;
+  }
+
+  // Dark mode adjustments
+  .dark & {
+    input, textarea {
+      &:disabled {
+        background-color: #374151;
+        color: #9ca3af;
+        
+        &::placeholder {
+          color: #6b7280;
+        }
+      }
+    }
+  }
+} 

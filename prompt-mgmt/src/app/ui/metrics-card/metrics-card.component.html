@@ -1,0 +1,23 @@
+<div class="bg-cardBg rounded-lg shadow-sm border border-cardBorder p-6 dark:bg-gray-800 dark:border-gray-700">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h3 class="text-sm font-medium text-cardSubtitle dark:text-gray-300">{{ title }}</h3>
+      <p class="text-2xl font-bold text-cardTitle dark:text-white">{{ value }}</p>
+    </div>
+  </div>
+  
+  <div class="h-20">
+    <apx-chart 
+      [series]="chartOptions.series" 
+      [chart]="chartOptions.chart"
+      [stroke]="chartOptions.stroke"
+      [fill]="chartOptions.fill"
+      [colors]="chartOptions.colors"
+      [dataLabels]="chartOptions.dataLabels"
+      [grid]="chartOptions.grid"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+      [tooltip]="chartOptions.tooltip">
+    </apx-chart>
+  </div>
+</div> 

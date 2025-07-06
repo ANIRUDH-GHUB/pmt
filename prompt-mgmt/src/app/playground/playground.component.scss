@@ -1,0 +1,124 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+// Custom slider styles
+::ng-deep .mat-slider {
+  .mat-slider-track-fill {
+    background-color: #6941C6 !important;
+  }
+  
+  .mat-slider-thumb {
+    background-color: #6941C6 !important;
+  }
+  
+  .mat-slider-thumb-label {
+    background-color: #6941C6 !important;
+  }
+}
+
+// Dark mode slider styles
+.dark ::ng-deep .mat-slider {
+  .mat-slider-track-fill {
+    background-color: #a855f7 !important;
+  }
+  
+  .mat-slider-thumb {
+    background-color: #a855f7 !important;
+  }
+  
+  .mat-slider-thumb-label {
+    background-color: #a855f7 !important;
+  }
+}
+
+// Custom form field styles
+::ng-deep .mat-form-field {
+  .mat-form-field-outline {
+    color: #d1d5db !important;
+  }
+  
+  .mat-form-field-label {
+    color: #6b7280 !important;
+  }
+  
+  .mat-select-value {
+    color: #374151 !important;
+  }
+}
+
+// Dark mode form field styles
+.dark ::ng-deep .mat-form-field {
+  .mat-form-field-outline {
+    color: #4b5563 !important;
+  }
+  
+  .mat-form-field-label {
+    color: #9ca3af !important;
+  }
+  
+  .mat-select-value {
+    color: #f3f4f6 !important;
+  }
+}
+
+// Custom scrollbar for the playground
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-slate-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-slate-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-slate-500;
+}
+
+// File upload area hover effects
+.file-upload-area {
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Output area styling
+.output-area {
+  pre {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+  }
+}
+
+// Version selector button animations
+.version-button {
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+// Model settings panel animations
+.model-settings-panel {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 

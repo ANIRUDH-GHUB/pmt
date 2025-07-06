@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+header {
+  background: #101828;
+  color: #fff;
+}
+
+.mat-icon, .material-icons {
+  color: #fff;
+}
+
+button[mat-icon-button]:hover .mat-icon,
+button[mat-icon-button]:hover .material-icons {
+  color: #6941C6;
+} 
