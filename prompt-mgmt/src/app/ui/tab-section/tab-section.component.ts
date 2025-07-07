@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,7 +28,7 @@ export interface TabSectionConfig {
   templateUrl: './tab-section.component.html',
   styleUrls: ['./tab-section.component.scss']
 })
-export class TabSectionComponent {
+export class TabSectionComponent implements OnChanges {
   @Input() config!: TabSectionConfig;
   @Input() sections: TabSection[] = [];
   @Input() activeSectionId?: string;
@@ -48,6 +48,19 @@ export class TabSectionComponent {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['sections']) {
+      // If the currently edited section was removed, cancel editing
+      if (this.editingSection && !this.sections.find(s => s.id === this.editingSection!.id)) {
+        this.cancelEditing();
+      }
+      // If the active section was removed, set to first section
+      if (this.activeSectionId && !this.sections.find(s => s.id === this.activeSectionId)) {
+        this.activeSectionId = this.sections.length > 0 ? this.sections[0].id : undefined;
+      }
+    }
+  }
+
   addSection() {
     if (this.config.maxSections && this.sections.length >= this.config.maxSections) {
       return;
@@ -60,32 +73,14 @@ export class TabSectionComponent {
       isActive: false
     };
 
-    this.sections = [...this.sections, newSection];
-    this.sectionsChange.emit(this.sections);
     this.sectionAdd.emit(newSection);
-    
-    // Activate the new section
-    this.setActiveSection(newSection.id);
   }
 
   removeSection(sectionId: string) {
     if (this.config.minSections && this.sections.length <= this.config.minSections) {
       return;
     }
-
-    this.sections = this.sections.filter(s => s.id !== sectionId);
-    this.sectionsChange.emit(this.sections);
     this.sectionRemove.emit(sectionId);
-
-    // If we removed the active section, activate the first available one
-    if (this.activeSectionId === sectionId) {
-      if (this.sections.length > 0) {
-        this.setActiveSection(this.sections[0].id);
-      } else {
-        this.activeSectionId = undefined;
-        this.activeSectionChange.emit('');
-      }
-    }
   }
 
   setActiveSection(sectionId: string) {
@@ -110,11 +105,6 @@ export class TabSectionComponent {
       content: this.editingContent
     };
 
-    this.sections = this.sections.map(s => 
-      s.id === this.editingSection!.id ? updatedSection : s
-    );
-    
-    this.sectionsChange.emit(this.sections);
     this.sectionUpdate.emit(updatedSection);
     this.cancelEditing();
   }

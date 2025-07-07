@@ -141,7 +141,10 @@ export class CreatePromptFormComponent implements OnInit, OnChanges {
   promptSectionsConfig = {
     title: 'Prompt Sections',
     addButtonText: 'Add Section',
-    removeButtonText: 'Remove'
+    removeButtonText: 'Remove',
+    allowAdd: true,
+    allowRemove: true,
+    allowEdit: true
   };
 
   activeSectionId: string = 'section_1';
@@ -345,12 +348,19 @@ export class CreatePromptFormComponent implements OnInit, OnChanges {
 
   onSectionAdd(section: TabSection) {
     this.formData.promptSections.push(section);
+    this.activeSectionId = section.id;
   }
 
   onSectionRemove(sectionId: string) {
     const index = this.formData.promptSections.findIndex(s => s.id === sectionId);
     if (index !== -1) {
-      this.removePromptSection(index);
+      this.formData.promptSections.splice(index, 1);
+      // Ensure at least one section is active
+      if (this.formData.promptSections.length > 0) {
+        this.activeSectionId = this.formData.promptSections[0].id;
+      } else {
+        this.activeSectionId = '';
+      }
     }
   }
 
