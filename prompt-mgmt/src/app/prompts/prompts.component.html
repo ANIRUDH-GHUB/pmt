@@ -30,13 +30,14 @@
   <ng-container *ngIf="(editingPrompt$ | async) as editingPrompt">
     <app-create-prompt-modal
       [isOpen]="isModalOpen"
-      [initialData]="editingPrompt ? convertPromptToFormData(editingPrompt) : null"
+      [initialData]="editingPrompt ? (editingPromptInitialData || convertPromptToFormData(editingPrompt)) : null"
       [isEditMode]="(isEditMode$ | async) ?? false"
       [availableVersions]="getAvailableVersions(editingPrompt)"
       [currentVersion]="editingPrompt.version.toString()"
       (save)="onSavePrompt($event)"
       (publish)="onPublishPrompt($event)"
       (close)="onCloseCreatePromptModal()"
+      (versionChange)="onVersionChange($event, editingPrompt)"
     ></app-create-prompt-modal>
   </ng-container>
   <ng-container *ngIf="!(editingPrompt$ | async)">
@@ -49,6 +50,7 @@
       (save)="onSavePrompt($event)"
       (publish)="onPublishPrompt($event)"
       (close)="onCloseCreatePromptModal()"
+      (versionChange)="onVersionChange($event, null)"
     ></app-create-prompt-modal>
   </ng-container>
 </ng-container> 

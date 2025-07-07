@@ -22,6 +22,7 @@ export class CreatePromptModalComponent {
   @Output() save = new EventEmitter<CreatePromptFormData>();
   @Output() publish = new EventEmitter<CreatePromptFormData>();
   @Output() close = new EventEmitter<void>();
+  @Output() versionChange = new EventEmitter<string>();
 
   onSave(formData: CreatePromptFormData) {
     this.save.emit(formData);
@@ -33,5 +34,9 @@ export class CreatePromptModalComponent {
 
   onClose() {
     this.close.emit();
+  }
+
+  onVersionChange(version: string) {
+    this.versionChange.emit(version);
   }
 } 

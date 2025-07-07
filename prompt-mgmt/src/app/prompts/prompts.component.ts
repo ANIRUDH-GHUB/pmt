@@ -13,7 +13,7 @@ import { HeaderComponent } from '../ui/header/header.component';
 import { PromptGridComponent } from '../ui/prompt-grid/prompt-grid.component';
 import { FilterBarComponent } from '../ui/filter-bar/filter-bar.component';
 import { CreatePromptModalComponent } from '../ui/create-prompt-modal/create-prompt-modal.component';
-import { PromptModel } from '../ui/prompt-card/prompt-card.model';
+import { PromptModel, PromptSection } from '../ui/prompt-card/prompt-card.model';
 import { CreatePromptFormData } from '../ui/create-prompt-form/create-prompt-form.component';
 import * as PromptActions from '../store/prompt/prompt.actions';
 import * as PromptSelectors from '../store/prompt/prompt.selectors';
@@ -39,8 +39,6 @@ export class PromptsComponent implements OnInit {
 
   title = 'Agenta.ai Lookalike';
   currentUser = 'Aniroodh Suddhapalli(07YNF)'; // Current user ID
-  availableVersions: string[] = ['1.0', '1.1', '1.2', '2.0'];
-  currentVersion: string = '1.0';
 
   // Observables
   prompts$ = this.store.select(PromptSelectors.selectAllPrompts);
@@ -63,7 +61,7 @@ export class PromptsComponent implements OnInit {
     myPrompts: false
   };
 
-
+  editingPromptInitialData: CreatePromptFormData | null = null;
 
   constructor(
     private overlayContainer: OverlayContainer,
@@ -124,13 +122,18 @@ export class PromptsComponent implements OnInit {
   onEditPrompt(prompt: PromptModel) {
     this.store.dispatch(PromptActions.setEditMode({ isEditMode: true, prompt }));
     this.store.dispatch(UIActions.openModal({ modalType: 'edit' }));
-    this.currentVersion = prompt.version.toString();
   }
 
   onSavePrompt(formData: CreatePromptFormData) {
     this.editingPrompt$.subscribe(editingPrompt => {
       if (editingPrompt) {
-        this.store.dispatch(PromptActions.updatePrompt({ prompt: editingPrompt }));
+        // Update the existing prompt with new data but keep the same version
+        const updatedPrompt = {
+          ...editingPrompt,
+          ...formData,
+          promptSections: this.convertFormDataToPromptSections(formData)
+        };
+        this.store.dispatch(PromptActions.updatePrompt({ prompt: updatedPrompt }));
       } else {
         this.store.dispatch(PromptActions.createPrompt({ formData }));
       }
@@ -141,7 +144,17 @@ export class PromptsComponent implements OnInit {
   onPublishPrompt(formData: CreatePromptFormData) {
     this.editingPrompt$.subscribe(editingPrompt => {
       if (editingPrompt) {
-        this.store.dispatch(PromptActions.publishPrompt({ formData }));
+        // Create a new version of the prompt with auto-incremented version
+        const newPrompt: PromptModel = {
+          ...editingPrompt,
+          ...formData,
+          promptSections: this.convertFormDataToPromptSections(formData),
+          version: parseFloat(editingPrompt.version.toString()) + 0.1,
+          published: true,
+          updatedAt: new Date(),
+          id: `${editingPrompt.id.split('v')[0]}v${(parseFloat(editingPrompt.version.toString()) + 0.1).toFixed(1)}`
+        };
+        this.store.dispatch(PromptActions.createPrompt({ formData }));
       } else {
         this.store.dispatch(PromptActions.createPrompt({ formData }));
       }
@@ -157,16 +170,6 @@ export class PromptsComponent implements OnInit {
   onCloseModal() {
     this.store.dispatch(UIActions.closeModal());
     this.store.dispatch(PromptActions.clearEditMode());
-  }
-
-  onVersionChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    this.currentVersion = target.value;
-  }
-
-  onNewVersionChange(event: Event) {
-    const target = event.target as HTMLInputElement;
-    // Handle new version input if needed
   }
 
   convertPromptToFormData(prompt: PromptModel): CreatePromptFormData {
@@ -189,6 +192,19 @@ export class PromptsComponent implements OnInit {
         isActive: index === 0
       }))
     };
+  }
+
+  convertFormDataToPromptSections(formData: CreatePromptFormData): PromptSection[] {
+    return formData.promptSections.map((section, index) => ({
+      id: section.id,
+      sequence: index + 1,
+      sectionName: section.title,
+      sectionText: section.content,
+      createdBy: this.currentUser,
+      createdAt: Date.now(),
+      updatedBy: this.currentUser,
+      updatedAt: Date.now()
+    }));
   }
 
   getUniqueUseCases(): string[] {
@@ -270,5 +286,19 @@ export class PromptsComponent implements OnInit {
     });
 
     return Array.from(groupedPrompts.values());
+  }
+
+  onVersionChange(version: string, editingPrompt: PromptModel | null) {
+    if (!editingPrompt) return;
+    // Find the prompt for the selected version
+    const promptForVersion = this.prompts.find(p =>
+      p.name === editingPrompt.name &&
+      p.useCase === editingPrompt.useCase &&
+      p.subUseCase === editingPrompt.subUseCase &&
+      p.version.toString() === version
+    );
+    if (promptForVersion) {
+      this.editingPromptInitialData = this.convertPromptToFormData(promptForVersion);
+    }
   }
 } 

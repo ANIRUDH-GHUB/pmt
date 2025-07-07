@@ -9,49 +9,24 @@
   <div class="form-content space-y-8">
     <!-- Version Selection Section (Edit Mode Only) -->
     <section *ngIf="isEditMode">
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-        <span class="material-icons text-accent">version</span>
-        Version Management
-      </h3>
-      <div class="grid gap-6">
-        <!-- Current Version Selection -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Current Version
-          </label>
-          <div class="flex items-center gap-3">
-            <select
-              [(ngModel)]="selectedVersion"
-              (change)="onVersionChange($event)"
-              class="px-4 py-2.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200"
-            >
-              <option *ngFor="let version of availableVersions" [value]="version">
-                v{{ version }}
-              </option>
-            </select>
-            <span class="text-sm text-gray-500 dark:text-gray-400">
-              Editing version {{ selectedVersion }}
-            </span>
-          </div>
-        </div>
-
-        <!-- New Version Input (for publishing) -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            New Version (for publishing)
-          </label>
-          <div class="flex items-center gap-3">
-            <input
-              type="text"
-              [(ngModel)]="newVersion"
-              (input)="onNewVersionChange($event)"
-              placeholder="e.g., 1.1, 2.0"
-              class="px-4 py-2.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200"
-            >
-            <span class="text-sm text-gray-500 dark:text-gray-400">
-              Leave empty to update current version
-            </span>
-          </div>
+      <!-- Version Selection -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Version
+        </label>
+        <div class="flex items-center gap-3">
+          <select
+            [(ngModel)]="selectedVersion"
+            (change)="onVersionChange($event)"
+            class="px-4 py-2.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200"
+          >
+            <option *ngFor="let version of availableVersions" [value]="version">
+              v{{ version }}
+            </option>
+          </select>
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            Editing version {{ selectedVersion }}
+          </span>
         </div>
       </div>
     </section>

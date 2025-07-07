@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -42,7 +42,7 @@ export interface TabSection {
   templateUrl: './create-prompt-form.component.html',
   styleUrls: ['./create-prompt-form.component.scss']
 })
-export class CreatePromptFormComponent implements OnInit {
+export class CreatePromptFormComponent implements OnInit, OnChanges {
   @Input() initialData: CreatePromptFormData | null = null;
   @Input() isEditMode = false;
   @Input() availableVersions: string[] = [];
@@ -50,6 +50,7 @@ export class CreatePromptFormComponent implements OnInit {
   @Output() save = new EventEmitter<CreatePromptFormData>();
   @Output() publish = new EventEmitter<CreatePromptFormData>();
   @Output() cancel = new EventEmitter<void>();
+  @Output() versionChange = new EventEmitter<string>();
 
   formData: CreatePromptFormData = {
     name: '',
@@ -77,7 +78,6 @@ export class CreatePromptFormComponent implements OnInit {
   selectedModelType: DropdownItem = { id: 'OpenAI', label: 'OpenAI' };
   selectedModelVersion: DropdownItem = { id: 'gpt-4o', label: 'GPT-4o' };
   selectedVersion: string = '1.0';
-  newVersion: string = '';
 
   // Error handling
   errors: { [key: string]: string } = {};
@@ -234,6 +234,13 @@ export class CreatePromptFormComponent implements OnInit {
     this.updateSelectedItems();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['initialData'] && changes['initialData'].currentValue) {
+      this.formData = { ...changes['initialData'].currentValue };
+      this.updateSelectedItems();
+    }
+  }
+
   updateSelectedItems() {
     this.selectedModelType = { id: this.formData.modelType, label: this.formData.modelType };
     this.selectedModelVersion = { id: this.formData.modelVersion, label: this.formData.modelVersion };
@@ -252,6 +259,12 @@ export class CreatePromptFormComponent implements OnInit {
   onPublish() {
     this.validateForm();
     if (!this.hasErrors) {
+      // Auto-increment version when publishing in edit mode
+      if (this.isEditMode && this.availableVersions.length > 0) {
+        const currentVersionNum = parseFloat(this.selectedVersion);
+        const nextVersion = (currentVersionNum + 0.1).toFixed(1);
+        this.selectedVersion = nextVersion;
+      }
       this.publish.emit(this.formData);
     }
   }
@@ -295,11 +308,7 @@ export class CreatePromptFormComponent implements OnInit {
   onVersionChange(event: Event) {
     const target = event.target as HTMLSelectElement;
     this.selectedVersion = target.value;
-  }
-
-  onNewVersionChange(event: Event) {
-    const target = event.target as HTMLInputElement;
-    this.newVersion = target.value;
+    this.versionChange.emit(this.selectedVersion);
   }
 
   addPromptSection() {

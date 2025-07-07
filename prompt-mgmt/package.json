@@ -27,7 +27,7 @@
     "@ngrx/store": "^16.3.0",
     "@ngrx/store-devtools": "^16.3.0",
     "@tailwindcss/typography": "^0.5.16",
-    "apexcharts": "^4.7.0",
+    "apexcharts": "^3.54.1",
     "ng-apexcharts": "^1.7.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
